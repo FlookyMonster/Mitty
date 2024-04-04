@@ -1,36 +1,55 @@
-
-
 # Import libraries
 from mpd import MPDClient
-import gi
+
+import os
+import platform
+
+if platform.system() == "Linux":
+    print("dis is a linux")
+    import gi
+    import dbus
+elif platform.system() == "Windows":
+    from win10toast import ToastNotifier
+
 gi.require_version('Gio', '2.0')
 from gi.repository import Gio
 
-client = MPDClient()
-client.timeout = None
-client.idletimeout = None
-client.connect("localhost", 6600)
+pw_Client = MPDClient()
+pw_Client.timeout = None
+pw_Client.idletimeout = None
+pw_Client.connect("localhost", 6600)
 
-def pw_Notify(title, subtitle):
-    Application = Gio.Application.new("hello.world", Gio.ApplicationFlags.FLAGS_NONE)
-    Application.register()
-    Notification = Gio.Notification.new(str(title))
-    Notification.set_body(str(subtitle))
-    Icon = Gio.ThemedIcon.new("dialog-information")
-    Notification.set_icon(Icon)
-    Application.send_notification(None, Notification)
+def pw_Notify(title, subtitle, manner):
+    if manner=="gi":
+        Application = Gio.Application.new("hello.world", Gio.ApplicationFlags.FLAGS_NONE)
+        Application.register()
+        Notification = Gio.Notification.new(str(title))
+        Notification.set_body(str(subtitle))
+        Icon = Gio.ThemedIcon.new("dialog-information")
+        Notification.set_icon(Icon)
+        Application.send_notification(None, Notification)
+    elif manner=="dbus":
+        obj = dbus.SessionBus().get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
+        obj = dbus.Interface(obj, "org.freedesktop.Notifications")
+        obj.Notify("", 0, "dialog-information", title, subtitle, [], {"urgency": 1}, 10000)
+
+print(pw_Client.currentsong())
 
 def pw_Refresh():
-    global pw_CurrentSong
-    pw_CurrentSong=client.currentsong()
-    if pw_CurrentSong == {}:
+    if pw_Client.currentsong() == {}:
         return False
 
-#print(client.currentsong()['title'])
+    else:
+        return True
 
 if pw_Refresh():
-    pw_Notify(1,2)
+    pw_Notify(
+        f"[{pw_Client.status()['state']}] {pw_Client.currentsong()['title']}", # Title
+        f"{pw_Client.currentsong()['artist']}\n{pw_Client.currentsong()['album']} ({pw_Client.currentsong()['date']})", # Subtitle
+        "dbus" # System used to display the notif
+    ) 
+
 else:
-    pw_Notify("Stopped",2)
+    pw_Notify("Stopped","")
     
 
