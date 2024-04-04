@@ -10,6 +10,9 @@ if platform.system() == "Linux":
     import dbus
 elif platform.system() == "Windows":
     from win10toast import ToastNotifier
+else:
+    print("You're running on an unsupported platform. Exiting.")
+    exit()
 
 gi.require_version('Gio', '2.0')
 from gi.repository import Gio
