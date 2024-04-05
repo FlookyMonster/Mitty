@@ -3,4 +3,4 @@
 # Linux
 - python-dbus
 # Windows
-- (Windows-Toasts)[https://pypi.org/project/Windows-Toasts/]
+- [Windows-Toasts](https://pypi.org/project/Windows-Toasts/)
