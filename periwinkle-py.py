@@ -11,10 +11,12 @@ if platform.system() == "Linux":
     gi.require_version('Gio', '2.0')
     from gi.repository import Gio
     import dbus
+
 elif platform.system() == "Windows":
     pw_Manner="win10"
     from win10toast import ToastNotifier
     pw_Toaster=ToastNotifier()
+
 else:
     print("You're running on an unsupported platform. Exiting.")
     exit()
@@ -42,9 +44,6 @@ def pw_Notify(title, subtitle, manner):
                               f"{subtitle}",
                               duration=10,
                               threaded=True)
-
-
-print(pw_Client.currentsong())
 
 def pw_Refresh():
     if pw_Client.currentsong() == {}:
