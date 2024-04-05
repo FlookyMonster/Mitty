@@ -1,14 +1,15 @@
+#!/usr/bin/python3
+
 # Import libraries
 from mpd import MPDClient
-
-import os
 import platform
 
+# Import different notification libraries for each operating system
 if platform.system() == "Linux":
     pw_Manner = "dbus"
     import dbus
 
-elif platform.system() == "Windows":
+elif platform.system() == "Windows" and platform.release() == "10" or platform.release() == "11":
     pw_Manner = "win10"
     from windows_toasts import Toast, WindowsToaster
     pw_Toast = WindowsToaster("Periwinkle")
@@ -26,14 +27,22 @@ def pw_Notify(title, subtitle, manner):
     if manner == "dbus":
         obj = dbus.SessionBus().get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
         obj = dbus.Interface(obj, "org.freedesktop.Notifications")
-        obj.Notify("", 0, "dialog-information", title, subtitle, [], {"urgency": 1}, 10000)
+        obj.Notify("", 
+        0, 
+        "", # Picture of the notification
+        title, # Title
+        subtitle, # Subtitle
+        [], 
+        {"urgency": 0}, 10000) # Urgency
 
     elif manner == "win10":
         newToast = Toast()
         if subtitle=="":
             newToast.text_fields = [title]
+
         else:
             newToast.text_fields = [title, subtitle]
+
         newToast.on_activated = lambda _: print('Toast clicked!')
         pw_Toast.show_toast(newToast)
 
