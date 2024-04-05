@@ -30,10 +30,10 @@ def pw_Notify(title, subtitle, manner):
 
     elif manner == "win10":
         newToast = Toast()
-
-        newToast.text_fields = [f"[{pw_Client.status()['state']}] {pw_Client.currentsong()['title']}", # Title
-        f"{pw_Client.currentsong()['artist']}\n{pw_Client.currentsong()['artist']} ({pw_Client.currentsong()['date']}) "] # Subtitle
-
+        if subtitle=="":
+            newToast.text_fields = [title]
+        else:
+            newToast.text_fields = [title, subtitle]
         newToast.on_activated = lambda _: print('Toast clicked!')
         pw_Toast.show_toast(newToast)
 
@@ -52,5 +52,5 @@ if pw_Refresh():
     ) 
 
 else:
-    pw_Notify("Stopped"," ",pw_Manner)
+    pw_Notify("Stopped", "", pw_Manner)
 
