@@ -1,6 +1,6 @@
 ## Dependencies
 - python-mpd2
-# Linux
+### Linux
 - python-dbus
-# Windows
+### Windows
 - [Windows-Toasts](https://pypi.org/project/Windows-Toasts/)
