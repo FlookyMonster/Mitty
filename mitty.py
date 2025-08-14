@@ -22,7 +22,6 @@ def mm_Help():
 def mm_AboutProgram():
 	about = "Mitty - MPD client that's like Periwinkle but not"
 
-
 def mm_SummonNotification(title, subtitle, cover=None):
     if mm_Manner == "dbus":
         obj = dbus.SessionBus().get_object("org.freedesktop.Notifications", "/org/freedesktop/Notifications")
@@ -66,11 +65,6 @@ def mm_SaveAlbumCover(filename, output):
         print("FFmpeg stderr:")
         print(e.stderr.decode('utf-8'))
 
-
-    #stdout=subprocess.PIPE,  # capture stdout
-    #stderr=subprocess.PIPE   # capture stderr (FFmpeg writes most info here)
-
-
 def mm_Refresh():
     if mm_Client.currentsong() == {}:
         return False
@@ -94,14 +88,8 @@ else:
     print("You're running on an unsupported platform. Exiting.")
     exit()
 
-#mm_HomeDir = mm_HomeDir.replace('\\', '/')
-
-print(mm_HomeDir)
-
 mm_DirectoryAlbumCover=os.path.join(mm_HomeDir, "mitty")
 mm_MusicDir=os.path.join(mm_HomeDir, "Music")
-
-print(mm_MusicDir)
 
 if os.path.exists(mm_DirectoryAlbumCover) == False:
     os.mkdir(mm_DirectoryAlbumCover)
@@ -111,8 +99,6 @@ try:
     mm_CurrentSong = f"{mm_Client.currentsong()['file']}"
 except KeyError:
     mm_CurrentSong = ""
-
-print(mm_CurrentSong)
 
 if mm_CurrentSong != "":
     mm_CurrentSongDirectory = os.path.join(mm_MusicDir, mm_CurrentSong)
